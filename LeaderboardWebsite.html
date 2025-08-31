@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Potato Collection Leaderboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+
+  <div class="bg-gray-800 p-6 rounded-2xl shadow-lg w-96">
+    <h1 class="text-2xl font-bold mb-4 text-center">🥔 Potato Leaderboard</h1>
+    <ul id="leaderboard" class="space-y-3"></ul>
+  </div>
+
+  <script>
+    const API_KEY = "26e694d9-8976-4d5d-a986-fdcfb1545858";  
+    const PLAYER_UUIDS = {
+      "Thomas": "6cd5a403e1524d04aa77189c51abdb21",
+      "Isaac": "54009885ec97416bb864767160a1a2cb",
+      "James": "b9ef741c7b8b4aafaf0da2ae7e6a171d"
+    };
+
+    async function getPotatoCount(uuid) {
+      const res = await fetch(`https://api.hypixel.net/v2/skyblock/profiles?key=${API_KEY}&uuid=${uuid}`);
+      const data = await res.json();
+
+      if (!data.success) return 0;
+
+      // Find the "selected" profile (the one currently active)
+      const profile = data.profiles.find(p => p.selected) || data.profiles[0];
+      const memberData = profile.members[uuid];
+      const collection = memberData.collection || {};
+      return collection.POTATO_ITEM || 0;
+    }
+
+    async function buildLeaderboard() {
+      const leaderboard = document.getElementById("leaderboard");
+      leaderboard.innerHTML = "<li>Loading...</li>";
+
+      const results = [];
+      for (const [name, uuid] of Object.entries(PLAYER_UUIDS)) {
+        const count = await getPotatoCount(uuid);
+        results.push({ name, count });
+      }
+
+      // Sort descending by potato count
+      results.sort((a, b) => b.count - a.count);
+
+      leaderboard.innerHTML = results.map((player, i) =>
+        `<li class="flex justify-between bg-gray-700 p-3 rounded-lg">
+          <span>${i+1}. ${player.name}</span>
+          <span class="font-mono">${player.count.toLocaleString()}</span>
+        </li>`
+      ).join("");
+    }
+
+    buildLeaderboard();
+  </script>
+</body>
+</html>
