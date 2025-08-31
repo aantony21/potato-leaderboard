@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Potato Collection Leaderboard</title>
+  <title>Potato Leaderboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+<body class="bg-yellow-100 text-white flex items-center justify-center min-h-screen">
 
-  <div class="bg-gray-800 p-6 rounded-2xl shadow-lg w-96">
-    <h1 class="text-2xl font-bold mb-4 text-center">🥔 Potato Leaderboard</h1>
+  <div class="bg-yellow-700 p-6 rounded-2xl shadow-lg w-96">
+    <h1 class="text-2xl font-bold mb-4 text-center">Potato Leaderboard</h1>
     <ul id="leaderboard" class="space-y-3"></ul>
   </div>
 
@@ -47,9 +47,9 @@
       results.sort((a, b) => b.count - a.count);
 
       leaderboard.innerHTML = results.map((player, i) =>
-        `<li class="flex justify-between bg-gray-700 p-3 rounded-lg">
+        `<li class="flex justify-between bg-yellow-800 p-3 rounded-lg">
           <span>${i+1}. ${player.name}</span>
-          <span class="font-mono">${player.count.toLocaleString()}</span>
+          <span class="font-mono">${player.count.toLocaleString()} 🥔</span>
         </li>`
       ).join("");
     }
